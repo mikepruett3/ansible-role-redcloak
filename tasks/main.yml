@@ -31,6 +31,19 @@
   ansible.builtin.file:
     path: "/root/software/{{ package_base_name }}/"
     state: directory
+  
+- name: "Check if installer package already exist"
+  ansible.builtin.stat:
+    path: "/root/software/{{ package_base_name }}/{{ package_name }}"
+  register: package
+
+- name: "Download installer package from local repository"
+  ansible.builtin.get_url:
+    url: "{{ software_url }}/{{ package_name }}"
+    dest: "/root/software/{{ package_base_name }}/"
+    validate_certs: no
+    mode: 0777
+  when: package.stat.exists != True
 
 #- name: "Install package"
 #  ansible.builtin.unarchive:
