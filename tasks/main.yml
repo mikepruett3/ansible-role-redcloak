@@ -49,4 +49,4 @@
   ansible.builtin.package:
     name: "/root/software/{{ package_base_name }}/{{ package_name }}"
     state: present
-  when: redcloak not in ansible_facts.packages
+  when: '"redcloak" not in ansible_facts.packages'
