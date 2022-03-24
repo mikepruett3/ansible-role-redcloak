@@ -1,2 +1,7 @@
 ---
 # defaults file for ansible-role-redcloak/
+
+software_url: "http://www.example.org"
+package_base_name: "redcloak"
+package_version: "1.2.15.0"
+datacenter: "xx01"
