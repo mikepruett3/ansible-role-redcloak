@@ -17,16 +17,6 @@
 #    - unzip
 #  when: item|string not in ansible_facts.packages
 
-#- name: "Set package_name fact (RedHat)"
-#  ansible.builtin.set_fact:
-#    package_name: "{{ package_base_name }}-{{ package_version }}_{{ ansible_architecture }}_{{ datacenter }}.rpm"
-#  when: ansible_os_family == "RedHat"
-
-#- name: "Set package_name fact (Debian)"
-#  ansible.builtin.set_fact:
-#    package_name: "{{ package_base_name }}-{{ package_version }}_{{ ansible_architecture }}_{{ datacenter }}.deb"
-#  when: ansible_os_family == "Debian"
-
 - name: "Create software directory under root homedir, if it does not exist"
   ansible.builtin.file:
     path: "/root/software/{{ package_name.split('-')[0] }}/"
