@@ -14,13 +14,15 @@ Role Variables
 Available variables are listed below, along with default values (see ```defaults/main.yml```):
 
 ``` yaml
-password_authentication: "no"
-
+software_url: "http://www.example.org"
+package_name: "redcloak-1.2.15.0_x86_64.rpm"
 ```
 
-Additional (**Optional**) variable is **sshd_config**. This is used to restrict what groups of users can SSH into the server, via the **AllowGroups** configuration in the sshd_config file. This group can be either local or some other external group (like *LDAP/AD*). If this variable is not defined, then the default SSH config will allow any valid user to login via SSH.
+```software_url``` **(Required)** The URL that hosts the Installer package. This should be either **http** or **https**.
 
-Role variables can be stored with the hosts.yaml file, or in the main variables file.
+```package_name``` **(Required)** The Installer package name.
+
+Role variables can be stored with the ```hosts.yaml``` file, or in the main variables file.
 
 Dependencies
 ------------
