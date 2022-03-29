@@ -41,13 +41,13 @@
       ansible.builtin.package:
         name: "/root/software/{{ package_name.split('-')[0] }}/{{ package_name }}"
         state: present
-        when:
-          - '"redcloak" not in ansible_facts.packages'
-          - ansible_os_family == 'RedHat'
+      when:
+        - '"redcloak" not in ansible_facts.packages'
+        - ansible_os_family == 'RedHat'
     - name: "Install package (Debian)"
       ansible.builtin.apt:
         deb: "/root/software/{{ package_name.split('-')[0] }}/{{ package_name }}"
         state: present
-        when:
-          - '"redcloak" not in ansible_facts.packages'
-          - ansible_os_family == 'Debian' 
+      when:
+        - '"redcloak" not in ansible_facts.packages'
+        - ansible_os_family == 'Debian' 
