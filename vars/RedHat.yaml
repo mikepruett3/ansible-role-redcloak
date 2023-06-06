@@ -1,0 +1,5 @@
+---
+# RedHat vars file for ansible-role-redcloak/
+
+packages:
+  - redhat-lsb-core

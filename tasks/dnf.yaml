@@ -1,0 +1,16 @@
+---
+# dnf (RedHat) tasks file for ansible-role-redcloak/
+
+- name: "Install required packages (RedHat)"
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages }}"
+
+- name: "Install package (RedHat)"
+  ansible.builtin.dnf:
+    name: "/root/software/redcloak/{{ package_name }}"
+    state: present
+    disable_gpg_check: yes
+  when:
+    - '"redcloak" not in ansible_facts.packages'

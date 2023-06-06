@@ -1,10 +1,15 @@
 ---
 # tasks file for ansible-role-redcloak/
 
+- name: "Include OS-specific variables"
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yaml"
+
 - name: "Gather the package facts"
   ansible.builtin.package_facts:
     manager: auto
-  when: ansible_facts.packages is not defined
+  when:
+    - ansible_facts.packages is not defined
 
 - name: "Create software directory under root homedir, if it does not exist"
   ansible.builtin.file:
@@ -24,29 +29,19 @@
     mode: '0770'
   when: package.stat.exists != True
 
-- name: "Install package (RHEL - yum)"
-  ansible.builtin.yum:
-    name: "/root/software/redcloak/{{ package_name }}"
-    state: present
+- name: "Include tasks from apt playbook"
+  ansible.builtin.include_tasks: apt.yaml
+  when:
+    - ansible_facts['os_family'] == 'Debian'
+
+- name: "Include tasks from yum playbook"
+  ansible.builtin.include_tasks: yum.yaml
   when:
     - ansible_facts['os_family'] == 'RedHat'
     - ansible_facts['distribution_major_version'] <= '7'
-    - '"redcloak" not in ansible_facts.packages'
 
-- name: "Install package (RHEL - dnf)"
-  ansible.builtin.dnf:
-    name: "/root/software/redcloak/{{ package_name }}"
-    state: present
-    disable_gpg_check: yes
+- name: "Include tasks from dnf playbook"
+  ansible.builtin.include_tasks: dnf.yaml
   when:
     - ansible_facts['os_family'] == 'RedHat'
     - ansible_facts['distribution_major_version'] >= '8'
-    - '"redcloak" not in ansible_facts.packages'
-
-- name: "Install package (Debian)"
-  ansible.builtin.apt:
-    deb: "/root/software/redcloak/{{ package_name }}"
-    state: present
-  when:
-    - ansible_facts['os_family'] == 'Debian'
-    - '"redcloak" not in ansible_facts.packages'
