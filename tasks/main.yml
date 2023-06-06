@@ -5,6 +5,14 @@
   ansible.builtin.include_vars:
     file: "{{ ansible_os_family }}.yaml"
 
+- name: "Test Access to Proxy Server"
+  ansible.builtin.uri:
+    url: "{{ proxy_protocol }}://{{ proxy_host }}:{{ proxy_port }}"
+    method: GET
+    validate_certs: no
+    status_code: [200, 400]
+  when: proxy != False
+
 - name: "Gather the package facts"
   ansible.builtin.package_facts:
     manager: auto
