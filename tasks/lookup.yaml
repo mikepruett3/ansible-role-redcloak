@@ -21,21 +21,6 @@
   when:
     - secureworks_home is not defined
 
-- name: "Read Version from existing installed version of redcloak"
-  ansible.builtin.shell:
-    cmd: "./redcloak --check | grep -i 'version:' | head -n 1 | cut -d ':' -f 2"
-    chdir: "{{ secureworks_home }}/redcloak/bin/"
-  register: result
-  when:
-    - secureworks_home is defined
-
-- name: "Version"
-  debug:
-    var: result.stdout
-  when:
-    - result is defined
-    - result.failed is false
-
 #- name: "Check for Managesoft config directory"
 #  ansible.builtin.stat:
 #    path: /var/opt/managesoft
@@ -108,26 +93,20 @@
 #    - result.stat.exists
 #    - result.failed is false
 
-#- name: "Read from Managesoft Configuration INI File"
-#  ansible.builtin.shell:
-#    cmd: "cat {{ config_file }} | grep -iP 'ETCPVersion='"
-#  register: result
-#  when:
-#    - config_file is defined
+- name: "Read Version from existing installed version of redcloak"
+  ansible.builtin.shell:
+    cmd: "./redcloak --check | grep -i 'version:' | head -n 1 | cut -d ':' -f 2"
+    chdir: "{{ secureworks_home }}/redcloak/bin/"
+  register: result
+  when:
+    - secureworks_home is defined
 
-#- name: "Get the version of installed Flexera Inventory Agent"
-#  debug:
-#    var: result.stdout
-#  when:
-#    - result is defined
-#    - result.failed is false
-
-#- name: "Set Facts for Flexera Inventory Agent Installed Version"
-#  ansible.builtin.set_fact:
-#    installed_version: "{{ result.stdout | split('=') | last }}"
-#  when:
-#    - result is defined
-#    - result.failed is false
+- name: "Set Facts for SecureWorks RedCloak Installed Version"
+  ansible.builtin.set_fact:
+    installed_version: "{{ result.stdout | split(' ') | last }}"
+  when:
+    - result is defined
+    - result.failed is false
 
 #- name: "Set Facts for Upgrade variable"
 #  ansible.builtin.set_fact:
