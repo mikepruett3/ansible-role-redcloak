@@ -58,21 +58,6 @@
     #- result.failed is false
     - not result.failed | bool
 
-#- name: "Check for Managesoft Configuration INI File"
-#  ansible.builtin.stat:
-#    path: "{{ managesoft_config_dir }}/etc/config.ini"
-#  register: result
-#  when:
-#    - managesoft_config_dir is defined
-
-#- name: "Set Facts for Managesoft Configuration INI File"
-#  ansible.builtin.set_fact:
-#    config_file: "{{ managesoft_config_dir }}/etc/config.ini"
-#  when:
-#    - managesoft_config_dir is defined
-#    - result.stat.exists
-#    - result.failed is false
-
 - name: "Read Version from existing installed version (RedCloak)"
   ansible.builtin.shell:
     cmd: "./redcloak --check | grep -i 'version:' | head -n 1 | cut -d ':' -f 2"
@@ -96,3 +81,11 @@
   when:
     - installed_version is defined
     - installed_version < package_version
+
+- name: "Set Facts for Upgrade to Taegis Agent from RedCloak Agent"
+  ansible.builtin.set_fact:
+    replace: true
+  when:
+    - redcloak is defined
+    - taegis is not defined
+    - "package_name.find('v=' ~ taegis) == -1"
