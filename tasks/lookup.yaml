@@ -21,62 +21,33 @@
   when:
     - secureworks_home is not defined
 
-#- name: "Check for Managesoft config directory"
-#  ansible.builtin.stat:
-#    path: /var/opt/managesoft
-#  register: result
-#  ignore_errors: true
+- name: "Check for RedCloak directory, in secureworks_home"
+  ansible.builtin.stat:
+    path: "{{ secureworks_home }}/redcloak"
+  register: result
+  ignore_errors: true
 
-#- name: "Set Facts for Managesoft config directory"
-#  ansible.builtin.set_fact:
-#    managesoft_config_dir: /var/opt/managesoft
-#  when:
-#    - result.stat.exists
-#    - result.stat.isdir
-#    - result.failed is false
+- name: "Set Facts for SecureWorks install directory"
+  ansible.builtin.set_fact:
+    redcloak: "{{ secureworks_home }}/redcloak"
+  when:
+    - result.stat.exists
+    - result.stat.isdir
+    - result.failed is false
 
-#- name: "Collect fingerprint of the Managesoft Certificate"
-#  ansible.builtin.shell:
-#    cmd: openssl x509 -noout -fingerprint -sha256 -inform pem -in '{{ managesoft_config_dir }}/etc/ssl/cert.pem'
-#  register: result
-#  when:
-#    - managesoft_home is defined
+- name: "Check for Taegis-Agent directory, in secureworks_home"
+  ansible.builtin.stat:
+    path: "{{ secureworks_home }}/taegis-agent"
+  register: result
+  ignore_errors: true
 
-#- name: "Set Facts for Managesoft Certificate fingerprint"
-#  ansible.builtin.set_fact:
-#    certificate: "{{ result.stdout | split('=') | last }}"
-#  when:
-#    - result.failed is false
-
-#- name: "Download Flexera Certificate file to /tmp"
-#  ansible.builtin.get_url:
-#    url: "{{ software_url }}/{{ cert_file }}"
-#    dest: "/tmp/"
-#    validate_certs: no
-#    mode: '0774'
-#  when:
-#    - managesoft_home is defined
-
-#- name: "Collect fingerprint of the latest Managesoft Certificate"
-#  ansible.builtin.shell:
-#    cmd: openssl x509 -noout -fingerprint -sha256 -inform pem -in '/tmp/{{ cert_file }}'
-#  register: result
-#  when:
-#    - managesoft_home is defined
-
-#- name: "Set Facts for latest Managesoft Certificate fingerprint"
-#  ansible.builtin.set_fact:
-#    certificate_latest: "{{ result.stdout | split('=') | last }}"
-#  when:
-#    - result.failed is false
-
-#- name: "Set Facts for Cert_Replace variable"
-#  ansible.builtin.set_fact:
-#    cert_replace: true
-#  when:
-#    - certificate is defined
-#    - certificate_latest is defined
-#    - certificate != certificate_latest
+- name: "Set Facts for Taegis-Agent install directory"
+  ansible.builtin.set_fact:
+    redcloak: "{{ secureworks_home }}/taegis-agent"
+  when:
+    - result.stat.exists
+    - result.stat.isdir
+    - result.failed is false
 
 #- name: "Check for Managesoft Configuration INI File"
 #  ansible.builtin.stat:
