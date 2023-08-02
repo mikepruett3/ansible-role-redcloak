@@ -80,7 +80,8 @@
     installed_version: "{{ result.stdout | split(' ') | last }}"
   when:
     - result is defined
-    - result.failed is false
+    #- result.failed is false
+    - not result.failed | bool
 
 - name: "Set Facts for Upgrade variable"
   ansible.builtin.set_fact:
@@ -88,4 +89,3 @@
   when:
     - installed_version is defined
     - installed_version < package_version
-    #- splunk_version != '7'
