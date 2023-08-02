@@ -75,13 +75,6 @@
     #- result.failed is false
     - not result.failed | bool
 
-- name: "Set Facts for Upgrade variable"
-  ansible.builtin.set_fact:
-    upgrade: true
-  when:
-    - installed_version is defined
-    - installed_version < package_version
-
 - name: "Set Facts for Upgrade to Taegis Agent from RedCloak Agent"
   ansible.builtin.set_fact:
     replace: true
@@ -89,3 +82,11 @@
     - redcloak is defined
     - taegis is not defined
     - '"taegis" in package_name'
+
+- name: "Set Facts for Upgrade variable"
+  ansible.builtin.set_fact:
+    upgrade: true
+  when:
+    - replace is not defined
+    - installed_version is defined
+    - installed_version < package_version
