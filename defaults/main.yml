@@ -7,3 +7,6 @@ proxy_host: "http://myproxyserver.example.com:3128"
 software_url: "http://www.example.org"
 package_name: "redcloak-1.2.15.0_x86_64.rpm"
 package_version: "1.2.15.0"
+
+registration_key: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx="
+secureworks_server: "xxx.x.taegiscloud.com"

@@ -1,0 +1,97 @@
+---
+# Install tasks file for ansible-role-redcloak
+
+- name: "Test if install boolean variable is set correctly"
+  ansible.builtin.assert:
+    that:
+      - install is defined
+      - install is boolean
+    quiet: yes
+
+- name: "Create software directory under root homedir, if it does not exist"
+  ansible.builtin.file:
+    path: "/root/software/redcloak/"
+    state: directory
+
+- name: "Check if installer package already exist"
+  ansible.builtin.stat:
+    path: "/root/software/redcloak/{{ package_name }}"
+  register: package
+
+- name: "Download installer package from local repository"
+  ansible.builtin.get_url:
+    url: "{{ software_url }}/{{ package_name }}"
+    dest: "/root/software/redcloak/"
+    validate_certs: no
+    mode: '0770'
+  when:
+    - not package.stat.exists | bool
+
+- name: "Install required packages (RedHat - yum)"
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages }}"
+  when:
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] <= '7'
+
+- name: "Install package (RedHat - yum)"
+  ansible.builtin.yum:
+    name: "/root/software/redcloak/{{ package_name }}"
+    state: present
+  when:
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] <= '7'
+
+- name: "Install required packages (RedHat - dnf)"
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages }}"
+  when:
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] >= '8'
+
+- name: "Install package (RedHat - dnf)"
+  ansible.builtin.dnf:
+    name: "/root/software/redcloak/{{ package_name }}"
+    state: present
+    disable_gpg_check: yes
+  when:
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version'] >= '8'
+
+- name: "Install required packages (Debian)"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages }}"
+  when:
+    - ansible_facts['os_family'] == 'Debian'
+
+- name: "Install package (Debian)"
+  ansible.builtin.apt:
+    deb: "/root/software/redcloak/{{ package_name }}"
+    state: present
+  when:
+    - ansible_facts['os_family'] == 'Debian'
+
+- name: "Register the SecureWorks Agent (RedCloak)"
+  ansible.builtin.shell:
+    cmd: "./redcloak register --key {{ registration_key }} --server {{ secureworks_server }} --use_proxy"
+    chdir: "{{ redcloak }}/bin/"
+    when:
+      - redcloak is defined
+
+- name: "Register the SecureWorks Agent (Taegis)"
+  ansible.builtin.shell:
+    cmd: "./taegisctl register --key {{ registration_key }} --server {{ secureworks_server }} --use_proxy"
+    chdir: "{{ taegis }}/bin/"
+  when:
+    - taegis is defined
+
+- name: "Start the SecureWorks Agent Service"
+  ansible.builtin.service:
+    name: "{{ secureworks_service }}"
+    state: restarted

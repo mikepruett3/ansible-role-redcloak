@@ -29,9 +29,10 @@
   when:
     - secureworks is defined
 
-- name: "Set Facts for SecureWorks Agent install directory (RedCloak)"
+- name: "Set Facts for SecureWorks Agent install directory & Service Name (RedCloak)"
   ansible.builtin.set_fact:
     redcloak: "{{ secureworks }}/redcloak"
+    secureworks_service: "redcloak"
   when:
     - secureworks is defined
     - result.stat.exists
@@ -46,9 +47,10 @@
   when:
     - secureworks is defined
 
-- name: "Set Facts for SecureWorks Agent install directory (Taegis)"
+- name: "Set Facts for SecureWorks Agent install directory & Service Name (Taegis)"
   ansible.builtin.set_fact:
     taegis: "{{ secureworks }}/taegis-agent"
+    secureworks_service: "taegis-agent"
   when:
     - secureworks is defined
     - result.stat.exists
