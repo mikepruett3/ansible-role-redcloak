@@ -13,7 +13,7 @@
   when:
     - result.stat.exists
     - result.stat.isdir
-    - result.failed is false
+    - not result.failed | bool
 
 - name: "Set Facts for Install variable"
   ansible.builtin.set_fact:
@@ -33,7 +33,7 @@
   when:
     - result.stat.exists
     - result.stat.isdir
-    - result.failed is false
+    - not result.failed | bool
 
 - name: "Check for Taegis-Agent directory, in secureworks"
   ansible.builtin.stat:
@@ -47,7 +47,7 @@
   when:
     - result.stat.exists
     - result.stat.isdir
-    - result.failed is false
+    - not result.failed | bool
 
 #- name: "Check for Managesoft Configuration INI File"
 #  ansible.builtin.stat:
@@ -76,13 +76,12 @@
   ansible.builtin.set_fact:
     installed_version: "{{ result.stdout | split(' ') | last }}"
   when:
-    - result is defined
-    - result.failed is false
+    - not result.failed | bool
 
-#- name: "Set Facts for Upgrade variable"
-#  ansible.builtin.set_fact:
-#    upgrade: true
-#  when:
-#    - installed_version is defined
-#    - installed_version != package_version
+- name: "Set Facts for Upgrade variable"
+  ansible.builtin.set_fact:
+    upgrade: true
+  when:
+    - installed_version is defined
+    - installed_version < package_version
     #- splunk_version != '7'
