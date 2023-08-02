@@ -79,6 +79,7 @@
   ansible.builtin.set_fact:
     installed_version: "{{ result.stdout | split(' ') | last }}"
   when:
+    - redcloak is defined
     - result is defined
     #- result.failed is false
     - not result.failed | bool
