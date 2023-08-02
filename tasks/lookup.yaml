@@ -27,7 +27,7 @@
     chdir: "{{ secureworks_home }}/redcloak/bin/"
   register: result
   when:
-    - config_file is defined
+    - secureworks_home is defined
 
 - name: "Version"
   debug:
