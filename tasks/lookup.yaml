@@ -21,6 +21,21 @@
   when:
     - secureworks_home is not defined
 
+- name: "Read Version from existing installed version of redcloak"
+  ansible.builtin.shell:
+    cmd: "redcloak --check | grep -i 'version:' | head -n 1 | cut -d ':' -f 2"
+    chdir: "{{ secureworks_home }}/redcloak/bin/"
+  register: result
+  when:
+    - config_file is defined
+
+- name: "Version"
+  debug:
+    var: result.stdout
+  when:
+    - result is defined
+    - result.failed is false
+
 #- name: "Check for Managesoft config directory"
 #  ansible.builtin.stat:
 #    path: /var/opt/managesoft
