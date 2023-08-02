@@ -1,0 +1,31 @@
+---
+# Assert tasks file for ansible-role-redcloak
+
+- name: "Test if Software URL and Package Information is set correctly"
+  ansible.builtin.assert:
+    that:
+      - software_url is defined
+      - software_url is string
+      - package_name is defined
+      - package_name is string
+      - package_version is defined
+      - package_version is string
+    quiet: yes
+
+- name: "Test if proxy settings are set correctly"
+  ansible.builtin.assert:
+    that:
+      - proxy is defined
+      - proxy is boolean
+      - proxy_host is defined
+      - proxy_host is string
+    quiet: yes
+  when:
+    - proxy is defined
+
+#- name: "Test if Heavy Forwarder settings are set correctly"
+#  ansible.builtin.assert:
+#    that:
+#      - heavy_forwarder is defined
+#      - heavy_forwarder is string
+#    quiet: yes

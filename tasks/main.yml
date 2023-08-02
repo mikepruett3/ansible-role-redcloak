@@ -1,5 +1,5 @@
 ---
-# tasks file for ansible-role-redcloak/
+# tasks file for ansible-role-redcloak
 
 - name: "Include OS-specific variables"
   ansible.builtin.include_vars:
@@ -7,7 +7,7 @@
 
 - name: "Test Access to Proxy Server"
   ansible.builtin.uri:
-    url: "{{ proxy_protocol }}://{{ proxy_host }}:{{ proxy_port }}"
+    url: "{{ proxy_host }}"
     method: GET
     validate_certs: no
     status_code: [200, 400]

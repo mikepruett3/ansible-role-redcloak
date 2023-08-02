@@ -1,10 +1,9 @@
 ---
 # defaults file for ansible-role-redcloak/
 
-proxy: False
-proxy_host: "myproxyserver.example.com"
-proxy_port: "3128"
-proxy_protocol: "http"
+proxy: false
+proxy_host: "http://myproxyserver.example.com:3128"
 
 software_url: "http://www.example.org"
 package_name: "redcloak-1.2.15.0_x86_64.rpm"
+package_version: "1.2.15.0"
