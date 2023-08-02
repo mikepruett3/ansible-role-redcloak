@@ -34,7 +34,8 @@
   when:
     - result.stat.exists
     - result.stat.isdir
-    - result.failed is false
+    #- result.failed is false
+    - not result.failed | bool
 
 - name: "Check for Taegis-Agent directory, in secureworks"
   ansible.builtin.stat:
