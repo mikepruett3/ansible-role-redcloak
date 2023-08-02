@@ -34,6 +34,7 @@
   ansible.builtin.set_fact:
     redcloak: "{{ secureworks }}/redcloak"
   when:
+    - secureworks is defined
     - result.stat.exists
     - result.stat.isdir
     #- result.failed is false
@@ -51,6 +52,7 @@
   ansible.builtin.set_fact:
     taegis: "{{ secureworks }}/taegis-agent"
   when:
+    - secureworks is defined
     - result.stat.exists
     - result.stat.isdir
     #- result.failed is false
