@@ -13,7 +13,6 @@
   when:
     - result.stat.exists
     - result.stat.isdir
-    #- result.failed is false
     - not result.failed | bool
 
 - name: "Set Facts for Install variable"
@@ -37,7 +36,6 @@
     - secureworks is defined
     - result.stat.exists
     - result.stat.isdir
-    #- result.failed is false
     - not result.failed | bool
 
 - name: "Check for Taegis-Agent directory, in secureworks"
@@ -55,7 +53,6 @@
     - secureworks is defined
     - result.stat.exists
     - result.stat.isdir
-    #- result.failed is false
     - not result.failed | bool
 
 - name: "Read Version from existing installed version (RedCloak)"
@@ -72,7 +69,6 @@
   when:
     - redcloak is defined
     - result is defined
-    #- result.failed is false
     - not result.failed | bool
 
 - name: "Set Facts for Upgrade to Taegis Agent from RedCloak Agent"
