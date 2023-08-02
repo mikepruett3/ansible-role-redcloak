@@ -13,7 +13,8 @@
   when:
     - result.stat.exists
     - result.stat.isdir
-    - result.failed is false
+    #- result.failed is false
+    - not result.failed | bool
 
 - name: "Set Facts for Install variable"
   ansible.builtin.set_fact:
