@@ -88,4 +88,4 @@
   when:
     - redcloak is defined
     - taegis is not defined
-    - "package_name.find('v=' ~ taegis) == -1"
+    - '"taegis" in package_name'
