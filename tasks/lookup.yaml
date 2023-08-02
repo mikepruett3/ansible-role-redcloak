@@ -27,6 +27,8 @@
     path: "{{ secureworks }}/redcloak"
   register: result
   ignore_errors: true
+  when:
+    - secureworks is defined
 
 - name: "Set Facts for SecureWorks Agent install directory (RedCloak)"
   ansible.builtin.set_fact:
@@ -42,6 +44,8 @@
     path: "{{ secureworks }}/taegis-agent"
   register: result
   ignore_errors: true
+  when:
+    - secureworks is defined
 
 - name: "Set Facts for SecureWorks Agent install directory (Taegis)"
   ansible.builtin.set_fact:
