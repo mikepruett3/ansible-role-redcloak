@@ -70,7 +70,7 @@
     chdir: "{{ redcloak }}/bin/"
   register: result
   when:
-    - secureworks is defined
+    - redcloak is defined
 
 - name: "Set Facts for SecureWorks Agent Installed Version (RedCloak)"
   ansible.builtin.set_fact:
