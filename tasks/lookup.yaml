@@ -1,15 +1,15 @@
 ---
 # Lookup tasks file for ansible-role-redcloak
 
-- name: "Check for SecureWorks install directory"
+- name: "Check for SecureWorks Agent install directory"
   ansible.builtin.stat:
     path: /opt/secureworks
   register: result
   ignore_errors: true
 
-- name: "Set Facts for SecureWorks install directory"
+- name: "Set Facts for SecureWorks Agent install directory"
   ansible.builtin.set_fact:
-    secureworks_home: /opt/secureworks
+    secureworks: /opt/secureworks
   when:
     - result.stat.exists
     - result.stat.isdir
@@ -19,31 +19,31 @@
   ansible.builtin.set_fact:
     install: true
   when:
-    - secureworks_home is not defined
+    - secureworks is not defined
 
-- name: "Check for RedCloak directory, in secureworks_home"
+- name: "Check for RedCloak directory, in secureworks"
   ansible.builtin.stat:
-    path: "{{ secureworks_home }}/redcloak"
+    path: "{{ secureworks }}/redcloak"
   register: result
   ignore_errors: true
 
-- name: "Set Facts for SecureWorks install directory"
+- name: "Set Facts for SecureWorks Agent install directory (RedCloak)"
   ansible.builtin.set_fact:
-    redcloak: "{{ secureworks_home }}/redcloak"
+    redcloak: "{{ secureworks }}/redcloak"
   when:
     - result.stat.exists
     - result.stat.isdir
     - result.failed is false
 
-- name: "Check for Taegis-Agent directory, in secureworks_home"
+- name: "Check for Taegis-Agent directory, in secureworks"
   ansible.builtin.stat:
-    path: "{{ secureworks_home }}/taegis-agent"
+    path: "{{ secureworks }}/taegis-agent"
   register: result
   ignore_errors: true
 
-- name: "Set Facts for Taegis-Agent install directory"
+- name: "Set Facts for SecureWorks Agent install directory (Taegis)"
   ansible.builtin.set_fact:
-    redcloak: "{{ secureworks_home }}/taegis-agent"
+    taegis: "{{ secureworks }}/taegis-agent"
   when:
     - result.stat.exists
     - result.stat.isdir
@@ -64,15 +64,15 @@
 #    - result.stat.exists
 #    - result.failed is false
 
-- name: "Read Version from existing installed version of redcloak"
+- name: "Read Version from existing installed version (RedCloak)"
   ansible.builtin.shell:
     cmd: "./redcloak --check | grep -i 'version:' | head -n 1 | cut -d ':' -f 2"
-    chdir: "{{ secureworks_home }}/redcloak/bin/"
+    chdir: "{{ redcloak }}/bin/"
   register: result
   when:
     - secureworks_home is defined
 
-- name: "Set Facts for SecureWorks RedCloak Installed Version"
+- name: "Set Facts for SecureWorks Agent Installed Version (RedCloak)"
   ansible.builtin.set_fact:
     installed_version: "{{ result.stdout | split(' ') | last }}"
   when:
