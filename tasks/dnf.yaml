@@ -7,7 +7,7 @@
     state: present
   with_items: "{{ packages }}"
   when:
-    - ansible_distribution_major_version <= '8'
+    - ansible_facts['distribution_major_version'] <= '8'
     # No redhat-lsb-core package in RHEL9
     # https://access.redhat.com/solutions/6960807
 
