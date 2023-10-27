@@ -23,3 +23,21 @@
   environment:
     http_proxy: "{{ proxy_host }}"
     https_proxy: "{{ proxy_host }}"
+
+- name: "Include tasks from assert playbook"
+  ansible.builtin.include_tasks: assert.yaml
+
+- name: "Include tasks from lookup playbook"
+  ansible.builtin.include_tasks: lookup.yaml
+
+- name: "Include tasks from install playbook"
+  ansible.builtin.include_tasks: install.yaml
+  when:
+    - install is defined
+    - install | bool
+
+#- name: "Include tasks from upgrade playbook"
+#  ansible.builtin.include_tasks: upgrade.yaml
+#  when:
+#    - upgrade is defined
+#    - upgrade | bool
