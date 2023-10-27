@@ -44,31 +44,33 @@
     name: "{{ secureworks_service }}"
     state: stopped
 
-- name: "Install package (RHEL - yum)"
-  ansible.builtin.yum:
-    name: "/root/software/redcloak/{{ package_name }}"
-    state: present
-  when:
-    - ansible_facts['os_family'] == 'RedHat'
-    - ansible_facts['distribution_major_version'] <= '7'
-
-- name: "Install package (RHEL - dnf)"
-  ansible.builtin.dnf:
-    name: "/root/software/redcloak/{{ package_name }}"
-    state: present
-    disable_gpg_check: yes
-  when:
-    - ansible_facts['os_family'] == 'RedHat'
-    - ansible_facts['distribution_major_version'] >= '8'
-
-- name: "Install package (Debian)"
-  ansible.builtin.apt:
-    deb: "/root/software/redcloak/{{ package_name }}"
-    state: present
-  when:
-    - ansible_facts['os_family'] == 'Debian'
-
-- name: "Start the SecureWorks Agent Service"
+- name: "Stop the SecureWorks Agent Updater Service (Taegis)"
   ansible.builtin.service:
-    name: "{{ secureworks_service }}"
-    state: restarted
+    name: "{{ secureworks_update }}"
+    state: stopped
+  when:
+    - taegis is defined
+
+- name: "Install Agent package"
+  ansible.builtin.include_tasks: "{{ ansible_facts['pkg_mgr'] }}.yaml"
+
+- name: "Start the SecureWorks Service (RedCloak)"
+  ansible.builtin.shell:
+    cmd: "./redcloak start"
+    chdir: "{{ redcloak }}/bin/"
+  when:
+    - redcloak is defined
+
+- name: "Start the SecureWorks Service (Taegis)"
+  ansible.builtin.shell:
+    cmd: "./taegisctl start"
+    chdir: "{{ taegis }}/bin/"
+  when:
+    - taegis is defined
+
+- name: "Start the SecureWorks Agent Updater Service (Taegis)"
+  ansible.builtin.service:
+    name: "{{ secureworks_update }}"
+    state: started
+  when:
+    - taegis is defined

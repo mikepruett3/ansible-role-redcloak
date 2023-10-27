@@ -51,6 +51,7 @@
   ansible.builtin.set_fact:
     taegis: "{{ secureworks }}/taegis-agent"
     secureworks_service: "taegis-agent"
+    secureworks_update: "taegis-update"
   when:
     - secureworks is defined
     - result.stat.exists

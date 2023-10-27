@@ -11,45 +11,15 @@
     method: GET
     validate_certs: no
     status_code: [200, 400]
-  when: proxy != False
-
-- name: "Gather the package facts"
-  ansible.builtin.package_facts:
-    manager: auto
   when:
-    - ansible_facts.packages is not defined
+    - proxy | bool
 
-- name: "Create software directory under root homedir, if it does not exist"
-  ansible.builtin.file:
-    path: "/root/software/redcloak/"
-    state: directory
-
-- name: "Check if installer package already exist"
-  ansible.builtin.stat:
-    path: "/root/software/redcloak/{{ package_name }}"
-  register: package
-
-- name: "Download installer package from local repository"
-  ansible.builtin.get_url:
-    url: "{{ software_url }}/{{ package_name }}"
-    dest: "/root/software/redcloak/"
+- name: "Test Access to SecureWorks Server"
+  ansible.builtin.uri:
+    url: "https://{{ secureworks_server }}"
+    method: GET
     validate_certs: no
-    mode: '0770'
-  when: package.stat.exists != True
-
-- name: "Include tasks from apt playbook"
-  ansible.builtin.include_tasks: apt.yaml
-  when:
-    - ansible_facts['os_family'] == 'Debian'
-
-- name: "Include tasks from yum playbook"
-  ansible.builtin.include_tasks: yum.yaml
-  when:
-    - ansible_facts['os_family'] == 'RedHat'
-    - ansible_facts['distribution_major_version'] <= '7'
-
-- name: "Include tasks from dnf playbook"
-  ansible.builtin.include_tasks: dnf.yaml
-  when:
-    - ansible_facts['os_family'] == 'RedHat'
-    - ansible_facts['distribution_major_version'] >= '8'
+    #status_code: [404]
+  environment:
+    http_proxy: "{{ proxy_host }}"
+    https_proxy: "{{ proxy_host }}"

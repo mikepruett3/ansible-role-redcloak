@@ -1,7 +1,7 @@
 ---
 # dnf (RedHat) tasks file for ansible-role-redcloak/
 
-- name: "Install required packages (RedHat)"
+- name: "Install required packages (dnf)"
   ansible.builtin.dnf:
     name: "{{ item }}"
     state: present
@@ -11,10 +11,8 @@
     # No redhat-lsb-core package in RHEL9
     # https://access.redhat.com/solutions/6960807
 
-- name: "Install package (RedHat)"
+- name: "Install package (dnf)"
   ansible.builtin.dnf:
     name: "/root/software/redcloak/{{ package_name }}"
     state: present
     disable_gpg_check: yes
-  when:
-    - '"redcloak" not in ansible_facts.packages'

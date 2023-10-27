@@ -1,15 +1,13 @@
 ---
 # apt (Debian) tasks file for ansible-role-redcloak/
 
-- name: "Install required packages (Debian)"
+- name: "Install required packages (apt)"
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   with_items: "{{ packages }}"
 
-- name: "Install package (Debian)"
+- name: "Install package (apt)"
   ansible.builtin.apt:
     deb: "/root/software/redcloak/{{ package_name }}"
     state: present
-  when:
-    - '"redcloak" not in ansible_facts.packages'

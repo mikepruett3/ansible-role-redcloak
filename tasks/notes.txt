@@ -1,0 +1,8 @@
+- How to Install the Secureworks XDR Taegis Agent
+https://www.dell.com/support/kbdoc/en-us/000193438/how-to-install-the-secureworks-taegis-xdr-agent
+
+- How to Identify the Secureworks Red Cloak Endpoint Agent Version
+https://www.dell.com/support/kbdoc/en-ph/000201789/how-to-identify-the-secureworks-red-cloak-endpoint-agent-version
+
+- How to Uninstall the Secureworks Taegis XDR Agent
+https://www.dell.com/support/kbdoc/en-pr/000193539/how-to-uninstall-secureworks-taegis-xdr-agent

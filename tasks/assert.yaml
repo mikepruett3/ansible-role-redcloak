@@ -23,9 +23,11 @@
   when:
     - proxy is defined
 
-#- name: "Test if Heavy Forwarder settings are set correctly"
-#  ansible.builtin.assert:
-#    that:
-#      - heavy_forwarder is defined
-#      - heavy_forwarder is string
-#    quiet: yes
+- name: "Test if SecureWorks Server settings are set correctly"
+  ansible.builtin.assert:
+    that:
+      - secureworks_server is defined
+      - secureworks_server is string
+      - registration_key is defined
+      - registration_key is string
+    quiet: yes
