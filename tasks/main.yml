@@ -19,7 +19,7 @@
     url: "https://{{ secureworks_server }}"
     method: GET
     validate_certs: no
-    #status_code: [404]
+    status_code: [404]
   environment:
     http_proxy: "{{ proxy_host }}"
     https_proxy: "{{ proxy_host }}"
