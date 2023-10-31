@@ -94,12 +94,12 @@
 - name: "Enable the SecureWorks Agent Service"
   ansible.builtin.service:
     name: "{{ secureworks_service }}"
-    state: enabled
+    enabled: true
 
 - name: "Enable the SecureWorks Agent Updater Service (Taegis)"
   ansible.builtin.service:
     name: "{{ secureworks_update }}"
-    state: enabled
+    enabled: true
   when:
     - taegis is defined
 
