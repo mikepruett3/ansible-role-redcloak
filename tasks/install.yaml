@@ -30,6 +30,47 @@
 - name: "Install Agent package"
   ansible.builtin.include_tasks: "{{ ansible_facts['pkg_mgr'] }}.yaml"
 
+- name: "Set Facts for SecureWorks Agent install directory"
+  ansible.builtin.set_fact:
+    secureworks: /opt/secureworks
+
+- name: "Check for RedCloak directory, in secureworks"
+  ansible.builtin.stat:
+    path: "{{ secureworks }}/redcloak"
+  register: result
+  ignore_errors: true
+  when:
+    - secureworks is defined
+
+- name: "Set Facts for SecureWorks Agent install directory & Service Name (RedCloak)"
+  ansible.builtin.set_fact:
+    redcloak: "{{ secureworks }}/redcloak"
+    secureworks_service: "redcloak"
+  when:
+    - secureworks is defined
+    - result.stat.exists
+    - result.stat.isdir
+    - not result.failed | bool
+
+- name: "Check for Taegis-Agent directory, in secureworks"
+  ansible.builtin.stat:
+    path: "{{ secureworks }}/taegis-agent"
+  register: result
+  ignore_errors: true
+  when:
+    - secureworks is defined
+
+- name: "Set Facts for SecureWorks Agent install directory & Service Name (Taegis)"
+  ansible.builtin.set_fact:
+    taegis: "{{ secureworks }}/taegis-agent"
+    secureworks_service: "taegis-agent"
+    secureworks_update: "taegis-update"
+  when:
+    - secureworks is defined
+    - result.stat.exists
+    - result.stat.isdir
+    - not result.failed | bool
+
 - name: "Register the SecureWorks Agent (RedCloak)"
   ansible.builtin.shell:
     cmd: "./redcloak register --key {{ registration_key }} --server {{ secureworks_server }} --use_proxy"
