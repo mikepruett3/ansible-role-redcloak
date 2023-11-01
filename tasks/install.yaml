@@ -107,6 +107,7 @@
   ansible.builtin.shell:
     cmd: "./redcloak start"
     chdir: "{{ redcloak }}/bin/"
+  ignore_errors: true
   when:
     - redcloak is defined
 
@@ -114,5 +115,6 @@
   ansible.builtin.shell:
     cmd: "./taegisctl start"
     chdir: "{{ taegis }}/bin/"
+  ignore_errors: true
   when:
     - taegis is defined
