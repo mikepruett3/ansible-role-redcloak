@@ -1,11 +1,11 @@
 ---
 # apt (Debian) tasks file for ansible-role-redcloak/
 
-- name: "Install required packages (apt)"
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ packages }}"
+#- name: "Install required packages (apt)"
+#  ansible.builtin.apt:
+#    name: "{{ item }}"
+#    state: present
+#  with_items: "{{ packages }}"
 
 - name: "Install package (apt)"
   ansible.builtin.apt:
